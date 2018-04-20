@@ -1,0 +1,59 @@
+//master writer
+#include <Wire.h>
+int x=0;
+int led=5;
+void setup() {
+  // put your setup code here, to run once:
+  Wire.begin();
+  pinMode(led, OUTPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  digitalWrite(led, HIGH);
+  delay(1000);
+  Wire.beginTransmission(1);
+  Wire.write(x);
+  Wire.endTransmission();
+  digitalWrite(led, LOW);
+  delay(1000);
+  x++;
+  if(x>5) 
+  {
+    x=0;
+  }
+}
+//slave receiver
+#include <Wire.h>
+int led=13;
+int x=0;
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(led, OUTPUT);
+  Wire.begin(8);
+  Wire.onReceive(received);
+  Serial.begin(9600);
+}
+void loop()
+{
+  delay(1000);
+}
+void received(int num) {
+  // put your main code here, to run repeatedly:
+  if (x=='0')
+  {
+    digitalWrite(led, HIGH);
+    delay(200);
+    digitalWrite(led, LOW);
+    delay(200);
+  }
+  if (x=='3')
+  {
+    digitalWrite(led, HIGH);
+    delay(400);
+    digitalWrite(led, LOW);
+    delay(400);
+  }
+  int n= Wire.read();
+  Serial.println(x);
+}
