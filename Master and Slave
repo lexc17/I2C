@@ -1,0 +1,60 @@
+//master 
+#include <Wire.h>
+byte x=0;
+int led=5;
+void setup() 
+{
+  // put your setup code here, to run once:
+  Wire.begin();
+  pinMode(led, OUTPUT);
+}
+
+void loop() 
+{
+  // put your main code here, to run repeatedly:
+  digitalWrite(led, HIGH);
+  delay(500);
+  Wire.beginTransmission(1);
+  Wire.write(x);
+  Wire.endTransmission();
+  digitalWrite(led, LOW);
+  delay(1000);
+  x++;
+  if(x>5) 
+  {
+    x=0;
+  }
+  delay(200);
+}
+//slave 
+#include <Wire.h>
+int led=10;
+byte x=0;
+void setup() 
+{
+  // put your setup code here, to run once:
+  pinMode(led, OUTPUT);
+  Wire.begin(1);
+  Wire.onReceive(received);
+}
+void loop()
+{
+  if (x==3)
+  {
+    digitalWrite(led, HIGH);
+    delay(400);
+    digitalWrite(led, LOW);
+    delay(400);
+  }
+  if (x==1)
+  {
+    digitalWrite(led, HIGH);
+    delay(400);
+    digitalWrite(led, LOW);
+    delay(400);
+  }
+}
+void received(int num) 
+{
+   x= Wire.read();
+}
